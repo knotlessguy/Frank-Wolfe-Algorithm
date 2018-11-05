@@ -11,29 +11,29 @@ def timeest(t0,xa,ca):
     tf = t0*(1+0.15(x/c)**4) #using alpha as 0.15 and Beta as 4
     return tf #returning the estimated cost
 
-def Zestim(alpha,xa,ca,t0,y):
+def estimateZ(alpha,xa,ca,t0,y):
     z = 0
     for i in range (len(x)):
-        z = integrate.quad(lambda x: estimatetime(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0]
-    return z
+        z = integrate.quad(lambda x: estimatetime(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0] #computing a defenite integral
+    return z #returning the value of the integral
 
 def linearsearch(xa,ca,t0,ya):
-	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded')
+	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded') #minimizing
 	return alpha.x
 
 # main functions
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
-LinkNode = pd.read_csv("linknode2.csv", header = None)
-LinkNode = LinkNode.as_matrix()
-#print LinkNode
-#print LinkNode.shape()
-#print LinkNode
+LinkNode = pd.read_csv("linknode2.csv", header = None) #In the form of a dataframe
+LinkNode = LinkNode.as_matrix() #converting it to a matrix
+print (LinkNode)
+print (LinkNode.shape())
+print (LinkNode)
 
 ## Import Demand matrix (Q)
-Q = pd.read_csv("Q.csv", header = None)
-Q = Q.as_matrix()
-#print Q
+Q = pd.read_csv("Q.csv", header = None) #demand matrix is saved in Q.csv
+Q = Q.as_matrix() #converting it into a matrix which can be used in python 
+print Q
 
 ## create travel time vector (ta)
 n = 76 # number of total links
