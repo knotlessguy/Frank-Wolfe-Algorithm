@@ -7,33 +7,35 @@ import numpy.linalg as la2
 import scipy.integrate as integrate
 
 
-def timeest(t0,xa,ca):
-    tf = t0*(1+0.15(x/c)**4) #using alpha as 0.15 and Beta as 4
-    return tf #returning the estimated cost
+def estimatetime(t0,xa,ca):
+	ta = t0*(1+0.15*(xa/ca)**4)
+	return ta
 
-def estimateZ(alpha,xa,ca,t0,y):
-    z = 0
-    for i in range (len(x)):
-        z = integrate.quad(lambda x: estimatetime(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0] #computing a defenite integral
-    return z #returning the value of the integral
+def estimateZ(alpha,xa,ca,t0,ya):
+	Z = 0
+	for i in range(len(xa)):
+		Z += integrate.quad(lambda x: estimatetime(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0]
+	return Z
 
 def linearsearch(xa,ca,t0,ya):
-	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded') #minimizing
+	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded')
 	return alpha.x
+
+
 
 # main functions
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
-LinkNode = pd.read_csv("linknode2.csv", header = None) #In the form of a dataframe
-LinkNode = LinkNode.as_matrix() #converting it to a matrix
-print (LinkNode)
-print (LinkNode.shape())
-print (LinkNode)
+LinkNode = pd.read_csv("linknode2.csv", header = None)
+LinkNode = LinkNode.as_matrix()
+#print LinkNode
+#print LinkNode.shape()
+#print LinkNode
 
 ## Import Demand matrix (Q)
-Q = pd.read_csv("Q.csv", header = None) #demand matrix is saved in Q.csv
-Q = Q.as_matrix() #converting it into a matrix which can be used in python 
-print Q
+Q = pd.read_csv("Q.csv", header = None)
+Q = Q.as_matrix()
+#print Q
 
 ## create travel time vector (ta)
 n = 76 # number of total links
@@ -111,7 +113,7 @@ Z = []
 
 while (tanorm>7.6): # allow each link has 0.1 diff. in ta on average
 	### Update
-	print "step ", step
+	print ("step ", step)
 	iteration.append(step)
 	ta_old = ta
 
@@ -129,17 +131,17 @@ while (tanorm>7.6): # allow each link has 0.1 diff. in ta on average
 
 	### move
 	alpha = linearsearch(xa,ca,t0,ya)
-	print "alpha is", alpha
+	print ("alpha is", alpha)
 	xa = (1-alpha)*xa + alpha * ya
-	print "xa is ",xa
+	print ("xa is ",xa)
 
 ### Update
 	ta = estimatetime(t0,xa,ca)
 	tanorm = la2.norm(ta-ta_old)
 	z = np.dot(np.transpose(xa),ta)
 	Z.append(z)
-	print "ta is ", ta
-	print "norm of ta is ", tanorm
+	print ("ta is ", ta)
+	print ("norm of ta is ", tanorm)
 	step +=1
 
 
@@ -151,5 +153,5 @@ plt.ylabel('Z(x)')
 plt.show()
 
 
-np.savetxt("ta", ta, delimiter = ",")
-np.savetxt("xa", xa, delimiter = ",")
+np.savetxt("taa.csv", ta, delimiter = ",")
+np.savetxt("xaa.csv", xa, delimiter = ",")
