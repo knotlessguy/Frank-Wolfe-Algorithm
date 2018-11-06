@@ -1,5 +1,10 @@
 # Frank-Wolfe-Algorithm
 Implementation of the Frank Wolfe Algorithm for transportation network analysis
+Team members: <br>
+  1) Amogha HA <br>
+  2) Aysuh Pandey <br>
+  3) Priyharsh Gangwar <br>
+  4) Ashwini Kumar Singh <br>
 
 # Import scipy.integrate as integrate (Function used in code)
 
