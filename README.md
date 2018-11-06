@@ -49,3 +49,5 @@ coeff = coeff.as_matrix() #Converting it to matrix form
 
 t0 = coeff [:,0] # free flow travel time from 1st column of *Coeff* <br>
 ca = coeff[:,1] # capacity for each link <br>
+
+For more information check the project report
