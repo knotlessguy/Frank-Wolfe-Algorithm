@@ -26,10 +26,10 @@ Subject to:   A_ub * x <= b_ub
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
 
-LinkNode = pd.read_csv("linknode2.csv", header = None)  #Reading it as a dataframe
+LinkNode = pd.read_csv("linknode2.csv", header = None)  #Reading it as a dataframe <br>
 LinkNode = LinkNode.as_matrix()
 
 
 ## Import Demand matrix (Q)
-Q = pd.read_csv("demand.csv", header = None) #Q to demand
+Q = pd.read_csv("demand.csv", header = None) #Q to demand <br>
 Q = Q.as_matrix()
