@@ -7,6 +7,8 @@ The quad function is a function from an old Fortran library. It works by judging
 
 https://github.com/knotlessguy/Frank-Wolfe-Algorithm/tree/master/images/img1.PNG
 
+<img src='https://github.com/knotlessguy/Frank-Wolfe-Algorithm/tree/master/images/img1.PNG'/>
+
 # Minimizing a linear objective function (Linear Programming)
 
 scipy.optimize.linprog
