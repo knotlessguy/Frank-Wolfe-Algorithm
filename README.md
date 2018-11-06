@@ -22,7 +22,7 @@ Minimize:     c^T * x
 Subject to:   A_ub * x <= b_ub
               A_eq * x == b_eq
 
-# main functions
+# Main functions
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
 
