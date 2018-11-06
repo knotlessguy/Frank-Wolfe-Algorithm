@@ -7,18 +7,18 @@ import numpy.linalg as la2
 import scipy.integrate as integrate
 
 
-def estimatetime(t0,xa,ca):
-	ta = t0*(1+0.15*(xa/ca)**4)
-	return ta
+def firstfunc(t0,xa,ca):
+	ta = t0*(1+0.15*(xa/ca)**4) #calculating Cij values using Vij and Kij, constants 0.15 and 4 have been obtained from online sources
+	return ta #xa represents Vij and ca represents Kij
 
 def estimateZ(alpha,xa,ca,t0,ya):
 	Z = 0
 	for i in range(len(xa)):
-		Z += integrate.quad(lambda x: estimatetime(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0]
+		Z += integrate.quad(lambda x: firstfunc(t0[i],x,ca[i]),0,xa[i]+alpha*(ya[i]-xa[i]))[0]
 	return Z
 
 def linearsearch(xa,ca,t0,ya):
-	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded')
+	alpha = minimize_scalar(estimateZ, args=(xa, ca, t0,ya), bounds = (0,1), method = 'Bounded') #Optimizes and finds the minimal value and returns alpha
 	return alpha.x
 
 
@@ -26,7 +26,7 @@ def linearsearch(xa,ca,t0,ya):
 # main functions
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
-LinkNode = pd.read_csv("linknode2.csv", header = None)  #Reading it as a dataframe 
+LinkNode = pd.read_csv("linknode2.csv", header = None)  #Reading it as a dataframe
 LinkNode = LinkNode.as_matrix()
 #print LinkNode
 #print LinkNode.shape()
@@ -101,7 +101,7 @@ result = np.reshape(result['x'],(k,n))
 #print result
 xa = np.sum(result, axis = 0) # intialization xa
 #print xa
-ta = estimatetime(t0,xa,ca)
+ta = firstfunc(t0,xa,ca)
 
 
 ###############
@@ -111,7 +111,7 @@ tanorm = 1000000
 iteration = []
 Z = []
 
-while (tanorm>7.6): # allow each link has 0.1 diff. in ta on average
+while (tanorm>(n/10)): # allow each link has 0.1 diff. in ta on average
 	### Update
 	print ("step ", step)
 	iteration.append(step)
@@ -123,20 +123,19 @@ while (tanorm>7.6): # allow each link has 0.1 diff. in ta on average
 	c = np.tile(c0,k)
 	result = optimize.linprog(
 	c, A_eq = A, b_eq = b, bounds = (ybounds), options = {"disp":True, "maxiter":2000,"bland":True}
-	)
-	#resultz = result['fun'] #print objective value
-	#print "z is",resultz
+	) #Optimizing the objective function
+
 	resultx = np.reshape(result['x'],(k,n))
 	ya = np.sum(resultx, axis = 0) # yn
 
 	### move
-	alpha = linearsearch(xa,ca,t0,ya)
+	alpha = linearsearch(xa,ca,t0,ya) #Will be obtained by minimizing/optimizing
 	print ("alpha is", alpha)
-	xa = (1-alpha)*xa + alpha * ya
+	xa = (1-alpha)*xa + alpha * ya #Phi in our case
 	print ("xa is ",xa)
 
 ### Update
-	ta = estimatetime(t0,xa,ca)
+	ta = firstfunc(t0,xa,ca)
 	tanorm = la2.norm(ta-ta_old)
 	z = np.dot(np.transpose(xa),ta)
 	Z.append(z)
