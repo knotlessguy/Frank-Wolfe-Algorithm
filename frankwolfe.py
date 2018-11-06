@@ -26,14 +26,14 @@ def linearsearch(xa,ca,t0,ya):
 # main functions
 #### Step 1: Network Representation and Data Structure
 ## Define the link-node matrix
-LinkNode = pd.read_csv("linknode2.csv", header = None)
+LinkNode = pd.read_csv("linknode2.csv", header = None)  #Reading it as a dataframe 
 LinkNode = LinkNode.as_matrix()
 #print LinkNode
 #print LinkNode.shape()
 #print LinkNode
 
 ## Import Demand matrix (Q)
-Q = pd.read_csv("Q.csv", header = None)
+Q = pd.read_csv("demand.csv", header = None) #Q to demand
 Q = Q.as_matrix()
 #print Q
 
@@ -51,7 +51,7 @@ s = (n,k) # 76 links, 24 nodes/origins
 #Y = np.zeros(s) # each entry represents the flow on link a from origin i
 
 ## import the travel time coeff. estimation matrix (Coeff)
-coeff = pd.read_csv("coeff2.csv", header = None)
+coeff = pd.read_csv("coefficient2.csv", header = None)
 coeff = coeff.as_matrix()
 #print coeff
 #print coeff.shape
