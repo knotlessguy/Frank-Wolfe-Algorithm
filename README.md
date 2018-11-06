@@ -1,13 +1,10 @@
 # Frank-Wolfe-Algorithm
 Implementation of the Frank Wolfe Algorithm for transportation network analysis
 
-# import scipy.integrate as integrate
+# Import scipy.integrate as integrate (Function used in code)
 
 The quad function is a function from an old Fortran library. It works by judging by the flatness and slope of the function it is integrating how to treat the step size it uses for numerical integration in order to maximize efficiency. What this means is that you may get slightly different answers from one region to the next even if they're analytically the same.
 
-![Test](https://raw.githubusercontent.com/knotlessguy/Frank-Wolfe-Algorithm/tree/master/images/img1.PNG)
-
-<img src='https://raw.githubusercontent.com/knotlessguy/Frank-Wolfe-Algorithm/tree/master/images/img1.PNG'/>
 
 # Minimizing a linear objective function (Linear Programming)
 
@@ -33,3 +30,22 @@ LinkNode = LinkNode.as_matrix()
 ## Import Demand matrix (Q)
 Q = pd.read_csv("demand.csv", header = None) #Q to demand <br>
 Q = Q.as_matrix()
+
+## create travel time vector (ta)
+n = 76 # number of total links (Using sample values, to be varied according to our input) <br>
+k = 24 # number of total nodes (Using sample values, to be varied according to our input) <br>
+
+## Create link flow matrix for iterations (Y)
+s = (n,k) # 76 links, 24 nodes/origins <br>
+#Y = np.zeros(s) # each entry represents the flow on link a from origin i
+
+## Import the travel time coeff. estimation matrix (Coeff)
+coeff = pd.read_csv("coefficient2.csv", header = None) <br>
+coeff = coeff.as_matrix() #Converting it to matrix form 
+
+### Step 2: Shortest Path Searching (Solve LP)
+
+##Initialization
+
+t0 = coeff [:,0] # free flow travel time from 1st column of *Coeff* <br>
+ca = coeff[:,1] # capacity for each link <br>
